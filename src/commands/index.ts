@@ -16,7 +16,7 @@ import clientDetails from "./port/clientDetails";
 import exposure from "./port/exposure";
 import users from "./port/users";
 // Reference
-import search from "./ref/search";
+import instruments from "./ref/instruments";
 import instrument from "./ref/instrument";
 import exchanges from "./ref/exchanges";
 import currencies from "./ref/currencies";
@@ -39,7 +39,7 @@ commander
   .usage("[global-options] <command> [cmd-options]")
   .option(
     "-p --properties <propertynames>",
-    "comma separated list of properties to output from the command",
+    "Comma separated list of properties to output from the command",
     commaSeparatedList
   );
 
@@ -53,10 +53,11 @@ commander
 // Reference
 
 commander
-  .command("search <keyword>")
-  .description("search for instruments")
-  .option("-t, --top <number>", "return top <number> of matching instruments", 10)
-  .action(search);
+  .command("instruments <keyword>")
+  .description("Search for instruments or contract option roots")
+  .option("-t, --top <number>", "Return top <number> of matching instruments", 10)
+  .option("-a, --assettypes <asset-types>", "Comma separated list of AssetTypes", commaSeparatedList, "")
+  .action(instruments);
 
 commander
   .command("instrument <uic> [assetType]")

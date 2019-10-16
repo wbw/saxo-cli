@@ -52,23 +52,25 @@ eventEmitter
     axios.defaults.headers.common["Authorization"] = `${accessTokenData.token_type} ${accessTokenData.access_token}`;
 
     let cmd = commander.parse(process.argv);
-
-    axios
-      .get(`${config.OpenApiBaseUrl}${cmd.apiUrl}`)
-      .then(response => {
-        let items = response.data.Data ? response.data.Data : response.data;
-        items = filterItems(cmd, items);
-        console.log(JSON.stringify(items, null, " "));
-        process.exit();
-      })
-      .catch(error => {
-        if (error.response.data) {
-          console.log(error.response.data.Message);
-        } else {
-          console.log(`${error.response.status}-${error.response.statusText}`);
-        }
-        process.exit(0);
-      });
+    console.log(`apiUrl=${cmd.apiUrl}`);
+    if (cmd.apiUrl) {
+      axios
+        .get(`${config.OpenApiBaseUrl}${cmd.apiUrl}`)
+        .then(response => {
+          let items = response.data.Data ? response.data.Data : response.data;
+          items = filterItems(cmd, items);
+          console.log(JSON.stringify(items, null, " "));
+          process.exit();
+        })
+        .catch(error => {
+          if (error.response.data) {
+            console.log(error.response.data.Message);
+          } else {
+            console.log(`${error.response.status}-${error.response.statusText}`);
+          }
+          process.exit(0);
+        });
+    }
   })
   .on("AuthenticationFailed", () => {
     fs.writeFileSync("accessToken.json", JSON.stringify({}));
